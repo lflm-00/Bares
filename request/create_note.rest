@@ -1,0 +1,26 @@
+POST http://localhost:3001/notes
+Content-Type: application/json
+
+{
+    "content" : "este contenido no es svacio" ,
+    "important" : true ,
+    "creator" : {
+            "name" : "Luis Fernando" ,
+            "LastName" : "Lopez Medina" ,
+            "age" : 10
+        }
+}
+
+###
+POST http://localhost:3001/notes
+Content-Type: application/json
+
+{
+    "content" : "este contenido no es svacio" ,
+    "important" : true ,
+    "creator" : {
+            "name" : "Juand Diego" ,
+            "LastName" : "Lopez Medina" ,
+            "age" : 10
+        }
+}
