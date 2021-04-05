@@ -1,0 +1,12 @@
+PUT  http://localhost:3001/notes/606b723f2bb4ba6e4474e661
+Content-Type: application/json
+
+{
+    "content" : "Note update with nodejs and mongoose" ,
+    "important" : true ,
+    "creator" : {
+            "name" : "Luis" ,
+            "LastName" : "Lopez" ,
+            "age" : 20
+        }
+}

@@ -16,7 +16,7 @@ POST http://localhost:3001/notes
 Content-Type: application/json
 
 {
-    "content" : "este contenido no es svacio" ,
+    "content" : "Note for remmember " ,
     "important" : true ,
     "creator" : {
             "name" : "Juand Diego" ,

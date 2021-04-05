@@ -2,6 +2,7 @@ require('dotenv').config()
 require('./mongo.js')
 
 const  json  = require('express')
+const { request } = require('express')
 const express = require('express')
 const app = express()
 const Note = require('./models/Note')
@@ -22,46 +23,81 @@ app.get('/notes' , (req , res ) => {
       })
 })
 
-app.get('/notes/:id' , (req , res ) => {
-    const id = Number(req.params.id)
-    const note = notes.find(note => note.id === id)
-    if(note){
-        res.json(note)    
-    }else{
-        res.send(`<h1>not found id ${id}</h1>`).end()
-    }
+app.get('/notes/:id' , (req , res , next) => {
+    const { id } = req.params
+    Note.findById(id).then(note =>{
+        if(note){
+            res.json(note)    
+        }else{
+            res.send(`<h1>not found id ${id}</h1>`).end()
+        }
+    }).catch(err =>{
+        next(err)
+    })
+    
 })
-app.delete('/notes/:id' , (req , res ) => {
-    const id = Number(req.params.id)
-    notes = notes.filter(note => notes.id != id)
-    res.send(notes)
-    res.status(204).end()
+
+app.put('/notes/:id' , (req , res , next) => {
+    const { id } = req.params
+    const note = req.body
+
+    const newNoteInfo = {
+        content : note.content , 
+        important :  note.important  || false ,
+        creator : {
+            name  : note.creator.name ,
+            LastName : note.creator.LastName ,
+            age : note.creator.age > 0 ?   note.creator.age  : 'invalid age' 
+        } 
+    }
+    Note.findByIdAndUpdate(id , newNoteInfo)
+      .then(result =>{
+          res.json(result)
+      })
+})
+
+app.delete('/notes/:id' , (req , res , next) => {
+    const { id } = req.params
+
+    Note.findByIdAndRemove(id).then(result =>{
+        res.status(404).end()
+    }).catch(error => next(error))
 })
 
 app.post('/notes', (req , res) =>{
-    const  age  = req.body.creator.age
-    const  name = req.body.creator.name
     const note = req.body
-    console.log(note)
-    const ids = notes.map(note => note.id) // Max ids for notes
-    const maxId = Math.max(...ids)
-    const newNote = {
-        id : maxId + 1,
-        content : note.content , 
-        important : typeof note.important != 'undefined' ? note.important :  false ,
-        fecha : new Date().toISOString() ,
-        creator : {
-            name  : name ,
-            LastName : note.creator.LastName ,
-            age : age > 0 ?   age  : 'invalid age' 
-        }
+    if(!note.content) {
+        return res.status(404).json({
+            error : 'require "content" field is missing'
+        })
     }
-    notes = [...notes , newNote]
-    res.json(newNote)
+    const newNote = new Note({
+        content : note.content , 
+        important :  note.important  || false ,
+        fecha : new Date(),
+        creator : {
+            name  : note.creator.name ,
+            LastName : note.creator.LastName ,
+            age : note.creator.age > 0 ?   note.creator.age  : 'invalid age' 
+        }
+    })
+    newNote.save().then(savedNote =>{
+        res.json(savedNote)
+    })
+   
 
 })
 const PORT = process.env.PORT
 
+app.use((error , req , res , next) =>{
+    console.error(error)
+
+    if(error.name === 'CastError') {
+        res.status(400).send({ error : 'id used is malformed'  })
+    } else {
+        res.status(500).end()
+    }
+})
 app.listen(PORT , () =>{
     console.log(`Server running on port ${PORT}`);
 })
