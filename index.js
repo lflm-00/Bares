@@ -4,26 +4,29 @@ require('./mongo.js')
 const  json  = require('express')
 const { request } = require('express')
 const express = require('express')
+const handleErrors = require('./middlewar/handleErrors.js')
+const notFound = require('./middlewar/notFound')
 const app = express()
 const Note = require('./models/Note')
+const usersRouter = require('./controllers/users')
 
 app.use(express.json())
 
 
-let notes = []
+
 
 app.get('/', (req , res) =>{
     res.send('Hello word')
 })
 
-app.get('/notes' , (req , res ) => {
+app.get('/api/notes' , (req , res ) => {
     Note.find({})
       .then(notes =>{
           res.json(notes);
       })
 })
 
-app.get('/notes/:id' , (req , res , next) => {
+app.get('/api/notes/:id' , (req , res , next) => {
     const { id } = req.params
     Note.findById(id).then(note =>{
         if(note){
@@ -37,7 +40,7 @@ app.get('/notes/:id' , (req , res , next) => {
     
 })
 
-app.put('/notes/:id' , (req , res , next) => {
+app.put('/api/notes/:id' , (req , res , next) => {
     const { id } = req.params
     const note = req.body
 
@@ -46,25 +49,25 @@ app.put('/notes/:id' , (req , res , next) => {
         important :  note.important  || false ,
         creator : {
             name  : note.creator.name ,
-            LastName : note.creator.LastName ,
+            lastName : note.creator.lastName ,
             age : note.creator.age > 0 ?   note.creator.age  : 'invalid age' 
         } 
     }
-    Note.findByIdAndUpdate(id , newNoteInfo)
+    Note.findByIdAndUpdate(id , newNoteInfo , { new : true })
       .then(result =>{
           res.json(result)
       })
 })
 
-app.delete('/notes/:id' , (req , res , next) => {
+app.delete('/api/notes/:id' , (req , res , next) => {
     const { id } = req.params
 
-    Note.findByIdAndRemove(id).then(result =>{
-        res.status(404).end()
-    }).catch(error => next(error))
+    Note.findByIdAndDelete(id)
+      .then(() =>  res.status(204).end())
+      .catch(error => next(error))
 })
 
-app.post('/notes', (req , res) =>{
+app.post('/api/notes', (req , res , next ) =>{
     const note = req.body
     if(!note.content) {
         return res.status(404).json({
@@ -77,27 +80,27 @@ app.post('/notes', (req , res) =>{
         fecha : new Date(),
         creator : {
             name  : note.creator.name ,
-            LastName : note.creator.LastName ,
+            lastName : note.creator.lastName ,
             age : note.creator.age > 0 ?   note.creator.age  : 'invalid age' 
         }
     })
     newNote.save().then(savedNote =>{
         res.json(savedNote)
-    })
+    }).catch(err => next(err))
    
 
 })
-const PORT = process.env.PORT
 
-app.use((error , req , res , next) =>{
-    console.error(error)
+app.use('/api/users' , usersRouter)
 
-    if(error.name === 'CastError') {
-        res.status(400).send({ error : 'id used is malformed'  })
-    } else {
-        res.status(500).end()
-    }
-})
-app.listen(PORT , () =>{
+//Midelwars
+app.use(notFound)
+app.use(handleErrors)
+
+//Port or Running server
+const PORT = process.env.PORT || 3001
+const server = app.listen(PORT , () =>{
     console.log(`Server running on port ${PORT}`);
 })
+
+module.exports = { app , server }
