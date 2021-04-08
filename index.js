@@ -12,7 +12,7 @@ app.use(express.json())
 
 
 
-
+//changes in index
 app.get('/', (req , res) =>{
     res.send('Hello word')
 })
