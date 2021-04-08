@@ -11,7 +11,7 @@ const notesRouter = require('./controllers/notes')
 app.use(express.json())
 
 
-
+//changes in de index
 
 app.get('/', (req , res) =>{
     res.send('Hello word')
