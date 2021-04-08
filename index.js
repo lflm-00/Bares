@@ -13,6 +13,8 @@ app.use(express.json())
 
 
 //changes in index
+//changes in de index
+
 app.get('/', (req , res) =>{
     res.send('Hello word')
 })
