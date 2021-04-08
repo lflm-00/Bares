@@ -38,14 +38,14 @@ beforeEach( async () =>{
     await nota2.save()
 })
 
-test('notes are returned as json' , async () =>{
+test.skip('notes are returned as json' , async () =>{
    await api
       .get('/notes')
       .expect(200)
       .expect('Content-Type' , /application\/json/)
 })
 
-test('there are two notes and no`t more' , async () =>{
+test.skip('there are two notes and no`t more' , async () =>{
     const response = await api.get('/notes')
     expect(response.body).toHaveLength(initialNotes.length)
 })

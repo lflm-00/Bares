@@ -1,10 +1,11 @@
-const { app } = require('../index')
+const { app , server } = require('../index')
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
-const supertest = require('supertest')
-const { json } = require('express')
+//const supertest = require('supertest')
+const mongoose = require('mongoose')
+//const { json } = require('express')
 
-const api = supertest(app)
+const api = require('../tests/helpers')
 
 describe.only('creating a new user' , () =>{
     beforeEach(async () =>{
@@ -42,4 +43,9 @@ describe.only('creating a new user' , () =>{
         const usernames = usersAtEnd.map(u => u.username)
         expect(usernames).toContain(newUser.username)
     })
+})
+
+afterAll(() =>{
+    mongoose.connection.close();
+    server.close();
 })
