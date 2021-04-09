@@ -1,9 +1,7 @@
-const { app , server } = require('../index')
+const {  server } = require('../index')
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
-//const supertest = require('supertest')
 const mongoose = require('mongoose')
-//const { json } = require('express')
 
 const api = require('../tests/helpers')
 
