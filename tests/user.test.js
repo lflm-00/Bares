@@ -2,8 +2,7 @@ const {  server } = require('../index')
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
 const mongoose = require('mongoose')
-
-const api = require('../tests/helpers')
+const {api, getUsers} = require('../tests/helpers')
 
 describe.only('creating a new user' , () =>{
     beforeEach(async () =>{
@@ -15,11 +14,9 @@ describe.only('creating a new user' , () =>{
         await user.save()
     })
 
-
     test('works as expected  creating a refresh user' ,async  () =>{
-        const usersDB = await User.find({})
-        const usersAtStart = usersDB.map(user => user.toJSON())
-
+        
+        const usersAtStart = await getUsers()
         const newUser = {
             name : 'luis' ,
             username : 'luisjddd' ,
@@ -29,21 +26,38 @@ describe.only('creating a new user' , () =>{
         await api
           .post('/api/users')
           .send(newUser)
-          .expect(200)
+          .expect(201)
           .expect('Content-Type' , /application\/json/)
 
-        const usersDBAfter = await User.find({})
-
-        const usersAtEnd = usersDBAfter.map(user => user.toJSON())
+        const usersAtEnd = await getUsers()
 
         expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
         const usernames = usersAtEnd.map(u => u.username)
         expect(usernames).toContain(newUser.username)
     })
+
+    test('creations fails with proper statuscode and message if username is al ready' , async ()=>{
+        const usersAtStart = await getUsers();
+        const newUser = {
+            username : 'jimebeltran' ,
+            name : 'jimena',
+            password : 'luisdev'
+        }
+        const result = await api
+          .post('/api/users')
+          .send(newUser)
+          .expect(400)
+          .expect('Content-Type' , /application\/json/)
+
+        expect(result.body.errors.username.message).toContain('`username` to be unique')
+        const usersAtEnd = await getUsers();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length)
+    })
+
+    afterAll(() =>{
+        mongoose.connection.close();
+        server.close();
+    }) 
 })
 
-afterAll(() =>{
-    mongoose.connection.close();
-    server.close();
-})

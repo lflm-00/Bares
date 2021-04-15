@@ -12,3 +12,7 @@ test.skip('palindrome of empty string', () => {
 
    expect(result).toBe('')
 })
+afterAll(() =>{
+    mongoose.connection.close();
+    server.close();
+}) 

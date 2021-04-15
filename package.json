@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
-    "test": "cross-env NODE_ENV=test PORT=3000 jest --verbose --silent",
+    "test": "cross-env NODE_ENV=test PORT=3000 jest --silent",
     "test:watch": "npm run test -- --watch"
   },
   "author": "Luis Fernando Lopez",
@@ -16,7 +16,8 @@
     "cross-env": "7.0.3",
     "dotenv": "8.2.0",
     "express": "4.17.1",
-    "mongoose": "5.12.3"
+    "mongoose": "5.12.3",
+    "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
     "eslint": "7.23.0",
