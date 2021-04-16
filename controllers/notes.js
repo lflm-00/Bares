@@ -1,11 +1,14 @@
 const notesRouter = require('express').Router();
 const Note = require('../models/Note');
+const User = require('../models/User');
 
-notesRouter.get('/' , (req , res ) => {
-    Note.find({})
-      .then(notes =>{
-          res.json(notes);
-      })
+notesRouter.get('/' , async (req , res ) => {
+    const notes = await Note.find({}).populate('user',{
+        username : 1 ,
+        name : 1
+    })
+    res.json(notes)
+
 })
 
 notesRouter.get('/:id' , (req , res , next) => {
@@ -22,26 +25,34 @@ notesRouter.get('/:id' , (req , res , next) => {
     
 })
 
-notesRouter.post('/api/notes', (req , res , next ) =>{
-    const note = req.body
-    if(!note.content) {
+notesRouter.post('/', async (req , res , next ) =>{
+    const { content,
+            important = false,
+            userId  
+        } = req.body
+    const user = await User.findById(userId)
+    if(!content) {
         return res.status(404).json({
             error : 'require "content" field is missing'
         })
     }
     const newNote = new Note({
-        content : note.content , 
-        important :  note.important  || false ,
-        fecha : new Date(),
-        creator : {
-            name  : note.creator.name ,
-            lastName : note.creator.lastName ,
-            age : note.creator.age > 0 ?   note.creator.age  : 'invalid age' 
-        }
+        content , 
+        important ,
+        date : new Date(),
+        user : user._id
     })
-    newNote.save().then(savedNote =>{
+
+    try {
+        const savedNote = await newNote.save()
+        user.notes = user.notes.concat(savedNote._id)
+        await user.save()
+
         res.json(savedNote)
-    }).catch(err => next(err))
+    } catch (error) {
+        next(error)
+    }
+    
    
 
 })

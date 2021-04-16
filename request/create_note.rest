@@ -1,14 +1,10 @@
-POST http://localhost:3001/notes
+POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content" : "este contenido no es svacio" ,
+    "content" : "note with property creator" ,
     "important" : true ,
-    "creator" : {
-            "name" : "Luis Fernando" ,
-            "LastName" : "Lopez Medina" ,
-            "age" : 10
-        }
+    "userId" : "606e31dffd6e072c9d94bbaf"
 }
 
 ###

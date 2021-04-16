@@ -9,7 +9,7 @@ describe.only('creating a new user' , () =>{
         await User.deleteMany({})
 
         const passwordHash = await bcrypt.hash('passsword' , 1)
-        const user = new User({ username : 'jimebeltran', name : 'jimena' , passwordHash })
+        const user = new User({ username : 'lflm00', name : 'luigui' , passwordHash })
 
         await user.save()
     })
@@ -40,8 +40,8 @@ describe.only('creating a new user' , () =>{
     test('creations fails with proper statuscode and message if username is al ready' , async ()=>{
         const usersAtStart = await getUsers();
         const newUser = {
-            username : 'jimebeltran' ,
-            name : 'jimena',
+            username : 'lflm00' ,
+            name : 'luigui',
             password : 'luisdev'
         }
         const result = await api
