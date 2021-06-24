@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOWQ1NjVkMDU1NWZiMGQyNTRmMjAwZCIsInVzZXJuYW1lIjoiTHVpc2ZsbTAwIiwiaWF0IjoxNjIwOTQ2ODI4LCJleHAiOjE2MjE1NTE2Mjh9.pxoQLODCCe0p2jI7wZux1gkp8R0o7iKd4WHdw82ZUFo
 
 {
-    "content" : "note with property creator" ,
-    "important" : true ,
-    "userId" : "606e31dffd6e072c9d94bbaf"
+    "content" : "created note use userExtractor" ,
+    "important" : true
 }
 
 ###

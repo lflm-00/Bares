@@ -1,3 +1,4 @@
+const userExtractor = require('../middlewar/userExtractor')
 const notesRouter = require('express').Router();
 const Note = require('../models/Note');
 const User = require('../models/User');
@@ -25,12 +26,16 @@ notesRouter.get('/:id' , (req , res , next) => {
     
 })
 
-notesRouter.post('/', async (req , res , next ) =>{
+notesRouter.post('/', userExtractor ,async (req , res , next ) =>{
     const { content,
-            important = false,
-            userId  
+            important = false
         } = req.body
+
+   // sacar userid de request
+const { userId } = req
+
     const user = await User.findById(userId)
+    console.log(user);
     if(!content) {
         return res.status(404).json({
             error : 'require "content" field is missing'
@@ -57,7 +62,7 @@ notesRouter.post('/', async (req , res , next ) =>{
 
 })
 
-notesRouter.put('/api/notes/:id' , (req , res , next) => {
+notesRouter.put('/api/notes/:id' , userExtractor ,(req , res , next) => {
     const { id } = req.params
     const note = req.body
 
@@ -76,7 +81,7 @@ notesRouter.put('/api/notes/:id' , (req , res , next) => {
       })
 })
 
-notesRouter.delete('/api/notes/:id' , (req , res , next) => {
+notesRouter.delete('/api/notes/:id' , userExtractor ,async (req , res , next) => {
     const { id } = req.params
 
     Note.findByIdAndDelete(id)
