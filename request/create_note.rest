@@ -1,12 +1,12 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOWQ1NjVkMDU1NWZiMGQyNTRmMjAwZCIsInVzZXJuYW1lIjoiTHVpc2ZsbTAwIiwiaWF0IjoxNjIwOTQ2ODI4LCJleHAiOjE2MjE1NTE2Mjh9.pxoQLODCCe0p2jI7wZux1gkp8R0o7iKd4WHdw82ZUFo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZGYzODRjYWQyNDgzMjdjODkwNWY4NiIsInVzZXJuYW1lIjoiY2h1c2NhIiwiaWF0IjoxNjI1MjQyMjIxLCJleHAiOjE2MjU4NDcwMjF9.NebSymqtMPdYa3IvFjRbFfDMkeWSHlnjbia8O1s5yWw
 
 {
-    "content" : "created note use userExtractor" ,
+    "content" : "created note by chusca" ,
     "important" : true
 }
-
+                  
 ###
 POST http://localhost:3001/notes
 Content-Type: application/json

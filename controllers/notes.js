@@ -11,6 +11,21 @@ notesRouter.get('/' , async (req , res ) => {
     res.json(notes)
 
 })
+notesRouter.get('/myNotes' , userExtractor, async (req , res , next ) => {
+    
+    const { userId } =  req
+    const array = []
+    try {
+        const user = await User.findById(userId);
+        for(notes of user.notes){ 
+            const noteId = await Note.findById(notes)
+            array.push(noteId);
+        }
+        res.json(array);
+    } catch (error) {
+        next(error)
+    }
+})
 
 notesRouter.get('/:id' , (req , res , next) => {
     const { id } = req.params
@@ -18,13 +33,14 @@ notesRouter.get('/:id' , (req , res , next) => {
         if(note){
             res.json(note)    
         }else{
-            res.send(`<h1>not found id ${id}</h1>`).end()
+            res.json(`<h1>not found id ${id}</h1>`).end()
         }
     }).catch(err =>{
         next(err)
     })
     
 })
+
 
 notesRouter.post('/', userExtractor ,async (req , res , next ) =>{
     const { content,
@@ -33,9 +49,8 @@ notesRouter.post('/', userExtractor ,async (req , res , next ) =>{
 
    // sacar userid de request
 const { userId } = req
-
+console.log(userId)
     const user = await User.findById(userId)
-    console.log(user);
     if(!content) {
         return res.status(404).json({
             error : 'require "content" field is missing'
@@ -62,26 +77,22 @@ const { userId } = req
 
 })
 
-notesRouter.put('/api/notes/:id' , userExtractor ,(req , res , next) => {
+notesRouter.put('/:id' , userExtractor ,(req , res , next) => {
     const { id } = req.params
     const note = req.body
 
+
     const newNoteInfo = {
         content : note.content , 
-        important :  note.important  || false ,
-        creator : {
-            name  : note.creator.name ,
-            lastName : note.creator.lastName ,
-            age : note.creator.age > 0 ?   note.creator.age  : 'invalid age' 
-        } 
+        important :  note.important  || false 
     }
-    Note.findByIdAndUpdate(id , newNoteInfo , { new : true })
+    Note.findByIdAndUpdate(id , newNoteInfo )
       .then(result =>{
           res.json(result)
-      })
+      }).catch(error => next(error))
 })
 
-notesRouter.delete('/api/notes/:id' , userExtractor ,async (req , res , next) => {
+notesRouter.delete('/:id' , userExtractor ,async (req , res , next) => {
     const { id } = req.params
 
     Note.findByIdAndDelete(id)

@@ -1,2 +1,8 @@
-GET  http://localhost:3001/api/notes
+GET  http://localhost:3001/api/notes/myNotes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZGYzODRjYWQyNDgzMjdjODkwNWY4NiIsInVzZXJuYW1lIjoiY2h1c2NhIiwiaWF0IjoxNjI1MjQyMjIxLCJleHAiOjE2MjU4NDcwMjF9.NebSymqtMPdYa3IvFjRbFfDMkeWSHlnjbia8O1s5yWw
+
+
+
+
+

@@ -1,4 +1,5 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const userExtractor = require('../middlewar/userExtractor');
 const usersRouter = require('express').Router()
 const User = require('../models/User')
 
@@ -29,6 +30,20 @@ usersRouter.post('/' , async ( req , res )=> {
         res.status(400).json(error)
     }
     
+})
+
+usersRouter.put('/' , userExtractor , (req , res ) =>{
+        const { userId } = req 
+        const { body } = req
+        const { name  } = body
+
+        const newUser = {
+            name : name
+        }
+        User.findByIdAndUpdate(userId , newUser )
+        .then(result =>{
+        res.json(result)
+    }).catch(error => next(error))
 })
 
 
