@@ -11,6 +11,20 @@ usersRouter.get('/' , async ( req , res) =>{
     res.json(users)
 })
 
+usersRouter.get('/:username' ,  ( req , res , next) =>{
+    const { username } = req.params
+    User.find({"username" : username}).populate('notes',{
+        content : 1 ,
+        date : 1
+    })
+     .then(user =>{
+         user ? res.json(user) : res.send("User not find")
+     }).catch(err =>{
+         next(err)
+     })
+    
+})
+
 usersRouter.post('/' , async ( req , res )=> { 
 
     try {

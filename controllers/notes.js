@@ -3,6 +3,9 @@ const notesRouter = require('express').Router();
 const Note = require('../models/Note');
 const User = require('../models/User');
 
+/*
+* Controlador para buscar todas las notas sin tener usuario en sesion  
+*/
 notesRouter.get('/' , async (req , res ) => {
     const notes = await Note.find({}).populate('user',{
         username : 1 ,
@@ -11,6 +14,11 @@ notesRouter.get('/' , async (req , res ) => {
     res.json(notes)
 
 })
+
+
+/*
+* Controlador para filtrar las notas por usuario en sesiòn
+*/
 notesRouter.get('/myNotes' , userExtractor, async (req , res , next ) => {
     
     const { userId } =  req
@@ -27,6 +35,30 @@ notesRouter.get('/myNotes' , userExtractor, async (req , res , next ) => {
     }
 })
 
+
+/*
+* Controlador para filtrar una nota por fecha inicio hasta fecha fin
+*/
+notesRouter.get('/date' , userExtractor , async (req , res , next) =>{
+    const { start , end } = req.body
+    const { userId } = req
+    const array = []
+    try {
+        const user = await User.findById(userId);
+        for(notes of user.notes){ 
+            const noteId = await Note.find({"$and" : [{"_id" : notes},{"date" : {"$gte" : start}},{"date" : {"$lte" : end}}]})
+            array.push(noteId);
+        }
+        array.length == 0 ? res.Json("<h1> not found</h1>") : res.json(array)
+        // res.json(array);
+    } catch (error) {
+        next(error)
+    }
+})
+
+/*
+* Controlador para filtrar una nota por fecha id
+*/
 notesRouter.get('/:id' , (req , res , next) => {
     const { id } = req.params
     Note.findById(id).then(note =>{
