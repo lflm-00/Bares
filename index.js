@@ -1,41 +1,37 @@
-require('dotenv').config()
-require('./mongo.js')
+require("dotenv").config();
+require("./mongo.js");
 
-const express = require('express')
-const handleErrors = require('./middlewar/handleErrors.js')
-const notFound = require('./middlewar/notFound')
-const app = express()
-const usersRouter = require('./controllers/users')
-const notesRouter = require('./controllers/notes')
-const loginRouter = require('./controllers/login')
-const cors = require('cors')
+const express = require("express");
+const handleErrors = require("./middlewar/handleErrors.js");
+const notFound = require("./middlewar/notFound");
+const app = express();
+const usersRouter = require("./controllers/users");
+const notesRouter = require("./controllers/notes");
+const loginRouter = require("./controllers/login");
+const cors = require("cors");
 
-
-app.use(express.json())
-app.use(cors())
-
-
+app.use(express.json());
+app.use(cors());
 
 //changes in index
 //changes in de index
 
-app.get('/', (req , res) =>{
-    res.send('Hello word')
-})
+app.get("/", (req, res) => {
+  res.send("");
+});
 // Routers
 
-
-app.use('/api/users' , usersRouter)
-app.use('/api/login' , loginRouter)
-app.use('/api/notes' , notesRouter)
+app.use("/api/users", usersRouter);
+app.use("/api/login", loginRouter);
+app.use("/api/notes", notesRouter);
 
 //Midelwars
-app.use(notFound)
-app.use(handleErrors)
+app.use(notFound);
+app.use(handleErrors);
 
 //Port or Running server
-const PORT = process.env.PORT || 3001
-const server = app.listen(PORT , () =>{
-    console.log(`Server running on port ${PORT}`);
-})
-module.exports = { app , server }
+const PORT = process.env.PORT || 3001;
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+module.exports = { app, server };
