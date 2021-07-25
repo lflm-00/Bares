@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env nodemon NODE_ENV=production node index.js",
-    "test": "cross-env NODE_ENV=test PORT=3000 jest --verbose --silent",
+    "test": "cross-env nodemon NODE_ENV=test node index.js PORT=3000",
     "test:watch": "npm run test -- --watch"
   },
   "author": "Luis Fernando Lopez",

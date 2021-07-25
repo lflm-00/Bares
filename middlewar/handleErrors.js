@@ -9,7 +9,7 @@ const ERROR_HANDLERS = {
 
   JsonWebTokenError: (res) =>
     res.status(401).json({
-      error: "Token missing or invalid",
+      error: "permission denied",
     }),
 
   TokenExpirerError: (res) => res.status(401).json({ error: "token expired " }),
