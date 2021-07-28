@@ -11,7 +11,13 @@ const userSchema = new Schema({
   },
   name: String,
   passwordHash: String,
+  avatar: {
+    type: String
+  },
   USER_ROLE: String,
+  cloudinary_id: {
+    type: String
+  },
   notes: [
     {
       type: Schema.Types.ObjectId,

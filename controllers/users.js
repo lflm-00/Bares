@@ -2,6 +2,18 @@ const bcrypt = require("bcrypt");
 const userExtractor = require("../middlewar/userExtractor");
 const usersRouter = require("express").Router();
 const User = require("../models/User");
+const cloudinary = require("../utils/cloudinary");
+const upload = require("../utils/multer");
+
+/** */
+usersRouter.post("/upload", upload.single('image'), async (req, res) => {
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path)
+    res.json(result)
+  } catch (error) {
+    console.log(error)
+  }
+});
 
 /*
  * Metodo para obtener todos los usuarios de la bd
