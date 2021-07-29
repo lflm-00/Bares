@@ -18,7 +18,7 @@ adminRouter.post("/", userExtractor, async (req, res) => {
   if (admin.USER_ROLE === "main_admin") {
     try {
       const { body } = req;
-      const { username, name, password, email } = body;
+      const { username, name, password, email } = body; // Los parametros que recuperamos del body 
       const saltRound = 4; // nivel de dificultad para la encriptaciòn
       const passwordHash = await bcrypt.hash(password, saltRound); // Aquì estamnos encriptando la contraseña
       const admin = new Admin({

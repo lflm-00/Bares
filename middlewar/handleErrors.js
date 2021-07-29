@@ -4,6 +4,9 @@ const ERROR_HANDLERS = {
       error: "id used is malformed",
     }),
 
+  TypeError : (res, { message }) =>
+  res.status(409).send({ error: message }),
+
   ValidationError: (res, { message }) =>
     res.status(409).send({ error: message }),
 
