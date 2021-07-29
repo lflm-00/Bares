@@ -3,20 +3,20 @@ const { Schema, model } = require("mongoose");
 const userSchema = new Schema({
   username: {
     type: String,
-    unique: true
+    unique: true,
   },
   email: {
     type: String,
-    unique: true
+    unique: true,
   },
   name: String,
   passwordHash: String,
   avatar: {
-    type: String
+    type: String,
   },
   USER_ROLE: String,
   cloudinary_id: {
-    type: String
+    type: String,
   },
   notes: [
     {

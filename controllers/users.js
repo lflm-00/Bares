@@ -6,14 +6,30 @@ const cloudinary = require("../utils/cloudinary");
 const upload = require("../utils/multer");
 
 /** */
-usersRouter.post("/upload", upload.single('image'), async (req, res) => {
-  try {
-    const result = await cloudinary.uploader.upload(req.file.path)
-    res.json(result)
-  } catch (error) {
-    console.log(error)
+usersRouter.put(
+  "/:id/upload",
+  upload.single("image"),
+  userExtractor,
+  async (req, res, next) => {
+    try {
+      const { userId } = req;
+      const user = await User.findById(userId);
+      await cloudinary.uploader.destroy(user.cloudinary_id);
+      const result = await cloudinary.uploader.upload(req.file.path);
+      const newUser = {
+        avatar: result.secure_url,
+        cloudinary_id: result.public_id,
+      };
+
+      const savedUser = await User.findByIdAndUpdate(userId, newUser, {
+        new: true,
+      });
+      res.status(201).json(savedUser);
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 /*
  * Metodo para obtener todos los usuarios de la bd
