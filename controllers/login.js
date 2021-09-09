@@ -2,15 +2,12 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const loginRouter = require("express").Router();
 const User = require("../models/User");
-const Admin = require("../models/Admin");
 
 loginRouter.post("/", async (req, res) => {
   const { body } = req;
   const { username, password } = body;
 
-  const user =
-    (await User.findOne({ username })) ||
-    (await Admin.findOne({ username }));
+  const user = await User.findOne({ username });
 
   const passwordCorrect =
     user === null ? false : await bcrypt.compare(password, user.passwordHash);
@@ -30,11 +27,13 @@ loginRouter.post("/", async (req, res) => {
   });
 
   res.send({
-    name: user.name,
-    username: user.username,
-    USER_ROLE: user.USER_ROLE,
-    email: user.email,
-    token,
+    id : user._id ,
+  //    name: user.name,
+  //    username: user.username,
+  //   // USER_ROLE: user.USER_ROLE,
+  //    email: user.email,
+  //   // token,
+  //  avatar: user.avatar
   });
 });
 

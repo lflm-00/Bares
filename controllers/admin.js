@@ -6,10 +6,14 @@ const Admin = require("../models/Admin");
 /*
  * Metodo para obtener todos los admins de la bd
  */
-adminRouter.get("/", async (req, res) => {
+adminRouter.get("/getAll",userExtractor ,async (req, res) => {
+  const { userId } = req;
+  console.log(userId)
   const admins = await Admin.find({});
 
-  res.json(admins);
+  admins === null ? "not found" : res.json(admins);
+
+  
 });
 
 adminRouter.post("/", userExtractor, async (req, res) => {
