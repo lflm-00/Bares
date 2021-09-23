@@ -9,7 +9,8 @@ module.exports = (req , res , next) =>{
     
     let decodedToken = {}
     decodedToken = jwt.verify(token , process.env.SECRET)
-    //console.log(decodedToken);
+    console.log(decodedToken);
+
 
     if(!token || !decodedToken.id) {
         console.log(token , decodedToken);

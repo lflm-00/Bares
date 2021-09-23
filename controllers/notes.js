@@ -34,8 +34,11 @@ notesRouter.get("/myNotes", userExtractor, async (req, res, next) => {
 
 /*
  * Controlador para filtrar una nota por fecha inicio hasta fecha fin
+userExtractor
  */
-notesRouter.get("/date", userExtractor, async (req, res, next) => {
+notesRouter.get("/date",  async (req, res, next) => {
+  const {inicio , fin } = req.params;
+  console.log(inicio , fin);
   const { start, end } = req.body;
   const { userId } = req;
   const array = [];

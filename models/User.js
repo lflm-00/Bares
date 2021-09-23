@@ -9,6 +9,7 @@ const userSchema = new Schema({
     type: String,
     unique: true,
   },
+  fechaCreacion : String ,
   name: String,
   passwordHash: String,
   avatar: {
