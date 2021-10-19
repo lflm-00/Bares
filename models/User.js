@@ -19,6 +19,7 @@ const userSchema = new Schema({
   cloudinary_id: {
     type: String,
   },
+  estado : Boolean ,
   notes: [
     {
       type: Schema.Types.ObjectId,

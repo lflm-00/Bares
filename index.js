@@ -9,6 +9,7 @@ const usersRouter = require("./controllers/users");
 const notesRouter = require("./controllers/notes");
 const loginRouter = require("./controllers/login");
 const adminRouter = require("./controllers/admin");
+const barRouter = require("./controllers/bar");
 const cors = require("cors");
 
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use("/api/admin", adminRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/notes", notesRouter);
+app.use("/api/bares" , barRouter );
 
 //Midelwars
 app.use(notFound);

@@ -11,8 +11,12 @@ const barSchema = new Schema({
         unique: true,
       },
     direccion : {
-        lat : String ,
-        long : String
+        latitud : {
+          type : String
+        } ,
+        longitud : {
+          type : String
+        }
     },
     estado : Boolean ,
     descripcion : String ,
@@ -38,8 +42,6 @@ barSchema.set("toJSON" ,{
         returnedObject.id = returnedObject._id;
         delete returnedObject._id;
         delete returnedObject.__v;
-    
-        delete returnedObject.passwordHash;
       },
 });
 
