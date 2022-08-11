@@ -21,8 +21,11 @@ usersRouter.get("/:token", async (req, res) => {
   try {
     let decodedToken = {}
     decodedToken = jwt.verify(token, process.env.SECRET)
+
     const user = await User.findById(decodedToken.id)
     res.json(user)
+
+    
   } catch (err) {
     console.log(err.message);
   }
@@ -153,3 +156,5 @@ usersRouter.delete("/:id", (req, res) => {
 
 })
 module.exports = usersRouter;
+
+

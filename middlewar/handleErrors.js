@@ -15,7 +15,8 @@ const ERROR_HANDLERS = {
       error: "permission denied",
     }),
 
-  TokenExpirerError: (res) => res.status(401).json({ error: "token expired " }),
+  TokenExpirerError: (res, {message}) =>
+   res.status(401).send({ error: message }),
 
   defaultError: (res) => res.status(500).end(),
 };
